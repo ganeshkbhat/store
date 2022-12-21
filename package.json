@@ -1,0 +1,38 @@
+{
+  "name": "store",
+  "version": "1.0.0",
+  "description": "Manage immutable stores with no jazz in a simple manner. Exploring simpler immutable stores architectures",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ganeshkbhat/store.git"
+  },
+  "exports": {
+    "require": "./index.js",
+    "import": "./index.mjs"
+  },
+  "keywords": [],
+  "author": "Ganesh Bhat",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ganeshkbhat/store/issues"
+  },
+  "homepage": "https://github.com/ganeshkbhat/store#readme",
+  "dependencies": {
+    "json-path-processor": "^0.2.5",
+    "lodash": "^4.17.21",
+    "lodash-deep": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.3",
+    "chai": "^4.3.6",
+    "hpp": "^0.2.3",
+    "loadtest": "^5.2.0",
+    "mocha": "^10.0.0",
+    "sinon": "^14.0.0",
+    "unimported": "^1.22.0"
+  }
+}

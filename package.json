@@ -1,5 +1,5 @@
 {
-  "name": "immutables",
+  "name": "immutablesjs",
   "version": "0.0.1",
   "description": "Manage immutable stores with no jazz in a simple manner. Exploring simpler immutable stores architectures",
   "main": "index.js",

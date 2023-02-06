@@ -1,5 +1,5 @@
 # store
-Manage immutable stores with no jazz in a simple manner. Exploring simpler architectures
+npm module to work with immutable stores. Manage immutable stores with no jazz in a simple manner. Exploring simpler immutable stores architectures
 
 ## INDEVELOPMENT - INSTALL WITH YOUR OWN RISK
 

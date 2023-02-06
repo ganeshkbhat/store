@@ -16,3 +16,5 @@
 /* eslint no-console: 0 */
 
 'use strict';
+
+module.exports.default = require("./src/store");

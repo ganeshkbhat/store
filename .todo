@@ -1,11 +1,13 @@
 
 * Features
-    - 
-    - 
-    - 
+    - Immutable store
+    - Event Manager for store
+    - Hooks manager for store
+
 
 * Todo
-    - 
+    - Add mixin for before and after hooks (rxjs-lite or self event manager based)
+    - Add event dispatchers and listeners manager
 
 ** Priority queues
 

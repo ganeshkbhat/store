@@ -16,3 +16,6 @@
 /* eslint no-console: 0 */
 
 'use strict';
+
+import { default as mutables } from "./index.js";
+export default mutables;

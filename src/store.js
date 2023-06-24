@@ -167,6 +167,7 @@ function store(name, value = null, hooks = {}) {
     const keys = path.split(/(?<!\\)\./); // Split the path by dot, ignoring escaped dots
     let currentObj = obj;
     let lastKey = keys.pop(); // Remove the last key from the array
+    console.log(lastKeys, keys);
     for (const key of keys) {
       const parsedKey = key.replace(/\\./g, '.');
       if (!currentObj.hasOwnProperty(parsedKey)) {
@@ -204,4 +205,5 @@ s.set("getter", [1, 4]);
 console.log(s.get("getter"));
 
 module.exports.default = store;
+module.exports.store = store;
 

@@ -4,7 +4,7 @@
   "description": "npm module to work with immutable stores. Manage immutable stores with no jazz in a simple manner. Exploring simpler immutable stores architectures",
   "main": "index.js",
   "scripts": {
-    "test": ""
+    "test": "mocha ./src/test.store.js"
   },
   "repository": {
     "type": "git",

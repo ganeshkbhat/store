@@ -140,7 +140,6 @@ function store(name, value = null, hooks = {}) {
     return value;
   }
 
-
   /** 
    * 
    * // Example usage:
@@ -167,7 +166,7 @@ function store(name, value = null, hooks = {}) {
     const keys = path.split(/(?<!\\)\./); // Split the path by dot, ignoring escaped dots
     let currentObj = obj;
     let lastKey = keys.pop(); // Remove the last key from the array
-    console.log(lastKeys, keys);
+    console.log(lastKey, keys);
     for (const key of keys) {
       const parsedKey = key.replace(/\\./g, '.');
       if (!currentObj.hasOwnProperty(parsedKey)) {
@@ -175,6 +174,7 @@ function store(name, value = null, hooks = {}) {
       }
       currentObj = currentObj[parsedKey]; // Update the current object reference
     }
+    console.log(currentObj);
     currentObj[lastKey.replace(/\\./g, '.')] = value; // Set the value at the last key
     return obj; // Return the updated object
   }
@@ -198,10 +198,6 @@ function store(name, value = null, hooks = {}) {
 
 Object.assign(store.prototype, eventMixin);
 Object.assign(store.prototype, hooksMixin);
-
-let s = new store("namer");
-s.set("getter", [1, 4]);
-console.log(s.get("getter"));
 
 module.exports.default = store;
 module.exports.store = store;

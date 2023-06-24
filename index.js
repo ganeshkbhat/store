@@ -18,3 +18,4 @@
 'use strict';
 
 module.exports.default = require("./src/store");
+module.exports = require("./src/store");

@@ -43,7 +43,7 @@ let eventMixin = {
   off(eventName, handler) {
     let handlers = this._eventHandlers?.[eventName];
     if (!handlers) return;
-    if (!handler) handlers = [];
+    if (!handler || handler === "all") handlers = [];
     for (let i = 0; i < handlers.length; i++) {
       if (handlers[i] === handler) {
         handlers.splice(i--, 1);

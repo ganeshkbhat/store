@@ -67,13 +67,13 @@ let eventMixin = {
 
 let hooksMixin = {
   register(valuename, callback) {
-    console.log("register tester hooks");
+    console.log("registering hooks");
     this.on(valuename, callback);
   },
 
   trigger(eventName, args) {
     if (!this._eventHandlers?.[eventName]) {
-      return; // no handlers for that event name
+      return new Error("Event not registered"); // no handlers for that event name
     }
 
     // call the handlers
@@ -81,7 +81,7 @@ let hooksMixin = {
   },
 
   unregister(valuename, callback) {
-    console.log("unregister tester hooks");
+    console.log("unregistering hooks");
     this.off(valuename, callback);
   }
 }

@@ -90,7 +90,7 @@ let hooksMixin = {
 // Add event dispatchers and listeners manager
 function store(name, value = null, hooks = {}) {
   this.name = name;
-  var data = value // { value: value, hooks: {} };
+  var data = { value: value, hooks: hooks } // { value: value, hooks: {} };
 
   this.get = function (objectname, args) {
     let result = _.get(data.value, objectname);
@@ -101,10 +101,10 @@ function store(name, value = null, hooks = {}) {
   }
 
   this.set = function (objectname, value, hooks = [], args) {
-    if (!_.get(data.value, objectname)) {
-      _.extend(data.value, { [objectname] : value });
-      _.extend(data.hooks, { [objectname] : hooks });
-    }
+    // if (!_.get(data.value, objectname)) {
+      data.value = _.extend(data.value, { [objectname] : value });
+      data.hooks = _.extend(data.hooks, { [objectname] : hooks });
+    // }
     
     if (!!_.get(data.hooks, objectname)) {
       this.trigger(objectname, args);
@@ -118,8 +118,8 @@ Object.assign(store.prototype, hooksMixin);
 
 let s = new store("namer");
 s.set("getter", [1, 4]);
-// s.set("getter.name", [1, 2, 3, 4]);
-console.log(s.get("getter"));
-// module.exports.default = store;
 
+console.log(s.get("getter"));
+
+module.exports.default = store;
 

@@ -88,10 +88,10 @@ let hooksMixin = {
 
 // Add mixin for before and after hooks (rxjs-lite or self event manager based)
 // Add event dispatchers and listeners manager
-function store(name, value = null, hooks = []) {
-
+function store(name, value = null, hooks = {}) {
   this.name = name;
   var data = value // { value: value, hooks: {} };
+
   this.get = function (objectname, args) {
     let result = _.get(data.value, objectname);
     if (!!_.get(data.hooks, objectname)) {
@@ -102,8 +102,8 @@ function store(name, value = null, hooks = []) {
 
   this.set = function (objectname, value, hooks = [], args) {
     if (!_.get(data.value, objectname)) {
-      _.set(data.value, { [objectname] : value });
-      _.set(data.hooks, { [objectname] : hooks });
+      _.extend(data.value, { [objectname] : value });
+      _.extend(data.hooks, { [objectname] : hooks });
     }
     
     if (!!_.get(data.hooks, objectname)) {

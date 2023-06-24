@@ -91,21 +91,22 @@ let hooksMixin = {
 function store(name, value = null, hooks = []) {
 
   this.name = name;
-  var data = value // { value: value, hooks: [] };
-  var hooks = [];
+  var data = value // { value: value, hooks: {} };
   this.get = function (objectname, args) {
-    let result = _.get(data, objectname);
-    if (!!_.get(hooks, objectname)) {
+    let result = _.get(data.value, objectname);
+    if (!!_.get(data.hooks, objectname)) {
       this.trigger(objectname, args);
     }
     return result;
   }
 
   this.set = function (objectname, value, hooks = [], args) {
-    if (!_.get(data)) _.set(data, {})
-    _.set(data, objectname, value);
-    // _.set(hooks, objectname, hooks);
-    if (!!_.get(hooks, objectname)) {
+    if (!_.get(data.value, objectname)) {
+      _.set(data.value, { [objectname] : value });
+      _.set(data.hooks, { [objectname] : hooks });
+    }
+    
+    if (!!_.get(data.hooks, objectname)) {
       this.trigger(objectname, args);
     }
   }
@@ -120,4 +121,5 @@ s.set("getter", [1, 4]);
 // s.set("getter.name", [1, 2, 3, 4]);
 console.log(s.get("getter"));
 // module.exports.default = store;
+
 

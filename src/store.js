@@ -92,108 +92,103 @@ function store(name, value = null, hooks = {}) {
   this.name = name;
   var data = { value: value, hooks: hooks } // { value: value, hooks: {} };
 
+  /** 
+   * 
+   * // Example 1
+    const obj1 = { a: { b: { c: [10, 20], "tester.cc": 10 } } };
+    const result1 = getValue(obj1, 'a.b.c');
+    console.log(result1); // Output: [10, 20]
+
+    // Example 2
+    const obj2 = { a: { b: { c: [10, 20], "tester.cc": 10 } } };
+    const result2 = getValue(obj2, 'a.b.c.0');
+    console.log(result2); // Output: 10
+
+    // Example 3
+    const obj3 = { a: { b: { c: [10, 20], "tester.cc": 10 } } };
+    const result3 = getValue(obj3, 'a.b.c.5');
+    console.log(result3); // Output: undefined
+
+    // Example 4
+    const obj4 = { a: { b: { c: [10, 20], "tester.cc": 10 } } };
+    const result4 = getValue(obj4, 'a.b');
+    console.log(result4); // Output: { c: [10, 20] }
+
+    // Example 5
+    const obj5 = { a: { b: { c: [10, 20], "tester.cc": 10 } } };
+    const result5 = getValue(obj5, 'a');
+    console.log(result5); // Output: { b: { c: [10, 20] } }
+
+    // Example 6
+    const obj6 = { a: { b: { c: [10, 20], "tester.cc": 10 } } };
+    const result6 = getValue(obj6, 'a.b.tester\\.cc');
+    console.log(result6); // Output: 10
+   *
+   */
   this.getValue = function getValue(obj, path) {
-    /** 
- *    // Example 1
-      const obj1 = { a: { b: { c: [10, 20] } } };
-      const result1 = getValue(obj1, 'a.b.c');
-      console.log(result1); // Output: [10, 20]
-
-      // Example 2
-      const obj2 = { a: { b: { c: [10, 20] } } };
-      const result2 = getValue(obj2, 'a.b.c.0');
-      console.log(result2); // Output: 10
-
-      // Example 3
-      const obj3 = { a: { b: { c: [10, 20] } } };
-      const result3 = getValue(obj3, 'a.b.c.5');
-      console.log(result3); // Output: undefined
-
-      // Example 4
-      const obj4 = { a: { b: { c: [10, 20] } } };
-      const result4 = getValue(obj4, 'a.b');
-      console.log(result4); // Output: { c: [10, 20] }
-
-      // Example 5
-      const obj5 = { a: { b: { c: [10, 20] } } };
-      const result5 = getValue(obj5, 'a');
-      console.log(result5); // Output: { b: { c: [10, 20] } }
-     */
-    const keys = path.split('.'); // Split the path into an array of keys
+    const keys = path.split(/(?<!\\)\./); // Split the path by dot, ignoring escaped dots
     let value = obj;
     for (const key of keys) {
-      if (value.hasOwnProperty(key)) {
-        value = value[key]; // Update the value based on the current key
+      const parsedKey = key.replace(/\\./g, '.');
+
+      if (value.hasOwnProperty(parsedKey)) {
+        value = value[parsedKey]; // Update the value based on the current key
       } else {
         return undefined; // Return undefined if any key is not found
       }
     }
-
     return value;
   }
 
+
   /** 
    * 
-    // Example 1
-    const obj1 = { a: {} };
-    const value1 = [10, 20];
-    const result1 = setValue(obj1, 'a.b.c', value1);
-    console.log(result1); // Output: { a: { b: { c: [10, 20] } } }
+   * // Example usage:
+    const obj = { a: { b: { c: [10, 20], "tester.cc": 10 } } };
 
-    // Example 2
-    const obj2 = { a: { b: { c: [10, 20] } } };
-    const value2 = { test: 10 };
-    const result2 = setValue(obj2, 'a.b.c.0', value2);
-    console.log(result2); // Output: { a: { b: { c: [{ test: 10 }, 10, 20] } } }
+    // Setting value at 'a.b.c'
+    const result1 = setValue(obj, 'a.b.c', [30, 40]);
+    console.log(result1); // Output: { a: { b: { c: [30, 40], "tester.cc": 10 } } }
 
-    // Example 3
-    const obj3 = { a: { b: { c: [10, 20] } } };
-    const value3 = { test: 10 };
-    const result3 = setValue(obj3, 'a.b.c.5', value3);
-    console.log(result3); // Output: { a: { b: { c: [10, 20, undefined, undefined, undefined, { test: 10 }] } } }
+    // Setting value at 'a.b.c.2'
+    const result2 = setValue(obj, 'a.b.c.2', 50);
+    console.log(result2); // Output: { a: { b: { c: [30, 40, 50], "tester.cc": 10 } } }
 
+    // Setting value at 'a.b.d'
+    const result3 = setValue(obj, 'a.b.d', { x: 100 });
+    console.log(result3); // Output: { a: { b: { c: [30, 40, 50], "tester.cc": 10, d: { x: 100 } } } }
+
+    // Setting value at 'a.e'
+    const result4 = setValue(obj, 'a.e', 'Hello');
+    console.log(result4); // Output: { a: { b: { c: [30, 40, 50], "tester.cc": 10, d: { x: 100 } }, e: 'Hello' } }
+   * 
    */
   this.setValue = function setValue(obj, path, value) {
-    const keys = path.split('.'); // Split the path into an array of keys
+    const keys = path.split(/(?<!\\)\./); // Split the path by dot, ignoring escaped dots
     let currentObj = obj;
-    for (let i = 0; i < keys.length - 1; i++) {
-      const key = keys[i];
-      if (!currentObj.hasOwnProperty(key) || typeof currentObj[key] !== 'object') {
-        currentObj[key] = {}; // Create an empty object if the key doesn't exist or its value is not an object
+    let lastKey = keys.pop(); // Remove the last key from the array
+    for (const key of keys) {
+      const parsedKey = key.replace(/\\./g, '.');
+      if (!currentObj.hasOwnProperty(parsedKey)) {
+        currentObj[parsedKey] = {}; // Create nested objects if the key doesn't exist
       }
-      currentObj = currentObj[key]; // Update the current object to the nested object
+      currentObj = currentObj[parsedKey]; // Update the current object reference
     }
-    const lastKey = keys[keys.length - 1];
-    const lastKeyIsArrayIndex = /^\d+$/.test(lastKey); // Check if the last key is a valid array index
-    if (lastKeyIsArrayIndex) {
-      const index = parseInt(lastKey);
-      if (Array.isArray(currentObj)) {
-        currentObj[index] = value; // Assign the value to the array index
-      } else {
-        currentObj = Array(index).fill(undefined); // Fill with undefined values until the desired index
-        currentObj[index] = value; // Assign the value to the array index
-      }
-    } else {
-      currentObj[lastKey] = value; // Set the value for the last key
-    }
-    return obj;
-  }
-
-  this.get = function (objectname, args) {
-    let result = _.get(data.value, objectname);
-    if (!!_.get(data.hooks, objectname)) {
-      this.trigger(objectname, args);
-    }
-    return result;
+    currentObj[lastKey.replace(/\\./g, '.')] = value; // Set the value at the last key
+    return obj; // Return the updated object
   }
 
   this.set = function (objectname, value, hooks = [], args) {
-    // if (!_.get(data.value, objectname)) {
-    data.value = _.extend(data.value, { [objectname]: value });
-    data.hooks = _.extend(data.hooks, { [objectname]: hooks });
-    // }
+    data.value = this.setValue(data.value, objectname, value);
+    data.hooks = this.setValue(data.hooks, objectname, hooks);
+    if (!!this.getValue(data.hooks, objectname)) {
+      this.trigger(objectname, args);
+    }
+  }
 
-    if (!!_.get(data.hooks, objectname)) {
+  this.get = function (objectname, args) {
+    data.value = this.getValue(data.value, objectname);
+    if (!!this.getValue(data.hooks, objectname)) {
       this.trigger(objectname, args);
     }
   }
